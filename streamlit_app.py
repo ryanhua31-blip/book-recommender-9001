@@ -20,6 +20,9 @@ client = OpenAI(
 st.write("First, write down some stuff you like",)
 
 
+
+
+
 # Totally neccessary column size calculations
 # if "c1t" not in st.session_state:
 #     st.session_state.c1t = .5
