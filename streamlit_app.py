@@ -53,7 +53,7 @@ with r:
 
 '''
 prompt = f"""
-Make a list of books that the user would probably like to read 
+Make a list of 6 (SPECIFICALLY 6) books that the user would probably like to read 
 based on the books they like and the genres they like. 
 Make sure to exclude books from the kinds of books they don't like 
 and genres they don't like.
@@ -137,11 +137,11 @@ if "recommendations" in st.session_state:
     # TODO - Homework: Create columns
     
     for i in range(0, len(r_list), 3):
-        cols = st.columns(3)
+        cols = st.columns([0.1, 1, 1, 1])
         for j in range(3):
             if i + j < len(r_list):
                 book = r_list[i + j]
-                with cols[j]:
+                with cols[j + 1]:
                     st.subheader(book["name"])
                     st.image(f"https://covers.openlibrary.org/b/isbn/{book['isbn']}-M.jpg")
 
