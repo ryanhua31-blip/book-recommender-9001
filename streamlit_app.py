@@ -9,7 +9,7 @@ client = OpenAI(
 )
 
 """
-# Book Recommender 9001 📖 📚
+# Book Recommender 9001 📖📚
 *"Indisputably, this is quite possibly the most sublime book recommender in existence."*
 —Shakespeare
 
@@ -19,29 +19,9 @@ client = OpenAI(
 
 st.write("First, write down some stuff you like",)
 
-
-
-
-
-# Totally neccessary column size calculations
-# if "c1t" not in st.session_state:
-#     st.session_state.c1t = .5
-# if "c1t_dir" not in st.session_state:
-#     st.session_state.c1t_dir = 0.01
-
-# st.session_state.c1t += st.session_state.c1t_dir
-# if st.session_state.c1t > .99:
-#     st.session_state.c1t_dir = -0.01
-# if st.session_state.c1t < .01:
-#     st.session_state.c1t_dir = 0.01
-
-# s2 = (st.session_state.c1t * 3) % 1
-# c = st.columns([st.session_state.c1t, 1.5, s2, 1.5, 1 - st.session_state.c1t + 1 - s2])
-
 c = st.columns(2)
 
 # Good Book Entries
-
 with c[0]:
     liked_books = st.text_input("Enter some book(s) you like here")
 
@@ -72,7 +52,6 @@ with r:
 ---
 
 '''
-
 prompt = f"""
 Make a list of books that the user would probably like to read 
 based on the books they like and the genres they like. 
@@ -82,7 +61,7 @@ Do not recommend books in the same series as the ones the user likes.
 Respond with JSON format
 """ + """
 {
-    "Recommedations": [
+    "Recommendations": [
         { 
             "name": "{book name}", 
             "author": "{name of author}", 
@@ -109,24 +88,64 @@ Genres they Don't like:
 {unliked_genres}
 """
 
+prompt_image = """
+Get the ISBN numbers for each of the books I will give you.
+Return in this JSON format:
+{
+    "{name}" : {isbn}
+}
+
+"""
+
+
+
 pressed = st.button("Get your book recommendations")
 if pressed:
-    api_call = client.responses.create(
+    api_call = client.chat.completions.create(
         model = "gpt-4o",
         response_format={"type": "json_object"},
         messages = [
             {"role": "system", "content": prompt},
         ]
     )
-    st.session_state.recommendations = json.loads(api_call.output[0].content[0].text)
+
+    st.session_state.recommendations = json.loads(api_call.choices[0].message.content)
+    
+    # Todo - get ISBNs
+    r_list = st.session_state.recommendations["Recommendations"]
+    for i in range(len(r_list)):
+        book_name = r_list[i]["name"]
+        
+        api_call = client.chat.completions.create(
+            model = "gpt-4o",
+            response_format={"type": "json_object"},
+            messages = [
+                {"role": "system", "content": prompt_image},
+                {"role": "user", "content": book_name},
+            ]
+        )
+        response = api_call.choices[0].message.content
+        response = json.loads(response)
+        isbn = response[book_name]
+        r_list[i]["isbn"] = isbn
 
 if "recommendations" in st.session_state:
-    # TODO HOMEWORK: Print out names individually 
-    # HINT: you need to loop
-    st.write(st.session_state.recommendations)
+    r_list = st.session_state.recommendations["Recommendations"]
+    isbn_value = 1
+    image_url = f"https://covers.openlibrary.org/b/isbn/{isbn_value}-s.jpg"
+
+    # TODO - Homework: Create columns
+    
+    for i in range(0, len(r_list), 3):
+        cols = st.columns(3)
+        for j in range(3):
+            if i + j < len(r_list):
+                book = r_list[i + j]
+                with cols[j]:
+                    st.subheader(book["name"])
+                    st.image(f"https://covers.openlibrary.org/b/isbn/{book['isbn']}-M.jpg")
 
 st.rerun()
-
 
 
 
