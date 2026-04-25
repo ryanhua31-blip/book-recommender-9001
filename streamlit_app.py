@@ -1,11 +1,13 @@
 import streamlit as st
+from dotenv import load_dotenv
 from openai import OpenAI
 import json
+import os
 
-key = st.text_input("enter ur key here")
+load_dotenv()
 
 client = OpenAI(
-    api_key=key
+    api_key=os.getenv("API_KEY")
 )
 
 """
