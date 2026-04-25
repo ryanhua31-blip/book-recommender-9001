@@ -6,11 +6,11 @@ This app was developed for a class project.
 
 ## 🚀 Features
 
-- **Personalized Recommendations**
+- **Personalized Recommendations:**
 Generates book suggestions based on user preferences.
-- **AI-Powered Engine**
+- **AI-Powered Engine:**
 Leverages the OpenAI API to produce relevant and diverse recommendations.
-- **Simple Web Interface**
+- **Simple Web Interface:**
 Built with Streamlit for an intuitive and interactive user experience.
 
 ### 🛠️ Getting Started
