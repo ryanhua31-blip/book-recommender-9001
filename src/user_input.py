@@ -9,7 +9,7 @@ def user_input():
     with c[0]:
         liked_books = st.text_input("Enter some book(s) you like here")
 
-    # Genre Entry
+    # Good Genre Entries
     with c[1]:
         liked_genres = st.text_input("Enter some genre(s) you like here")
 
@@ -23,12 +23,13 @@ def user_input():
 
     st.write("Now, write down some books and genres that you don't like")
 
-    # Bad Book Entries
     l, r = st.columns(2)
 
+    # Bad Book Entries
     with l:
         unliked_books = st.text_input("Enter some book(s) you don't like here")
 
+    # Bad Genre Entries
     with r:
         unliked_genres = st.text_input("Enter some genre(s) you don't like here")
 
