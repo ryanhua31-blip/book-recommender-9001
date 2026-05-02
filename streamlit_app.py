@@ -55,7 +55,7 @@ with r:
 
 '''
 prompt = f"""
-Make a list of 6 (SPECIFICALLY 6) books that the user would probably like to read 
+Make a list of 6 books that the user would probably like to read 
 based on the books they like and the genres they like. 
 Make sure to exclude books from the kinds of books they don't like 
 and genres they don't like.
@@ -99,8 +99,6 @@ Return in this JSON format:
 
 """
 
-
-
 pressed = st.button("Get your book recommendations")
 if pressed:
     api_call = client.chat.completions.create(
@@ -113,7 +111,6 @@ if pressed:
 
     st.session_state.recommendations = json.loads(api_call.choices[0].message.content)
     
-    # Todo - get ISBNs
     r_list = st.session_state.recommendations["Recommendations"]
     for i in range(len(r_list)):
         book_name = r_list[i]["name"]
@@ -135,8 +132,6 @@ if "recommendations" in st.session_state:
     r_list = st.session_state.recommendations["Recommendations"]
     isbn_value = 1
     image_url = f"https://covers.openlibrary.org/b/isbn/{isbn_value}-s.jpg"
-
-    # TODO - Homework: Create columns
     
     for i in range(0, len(r_list), 3):
         cols = st.columns([0.1, 1, 1, 1])
@@ -148,14 +143,3 @@ if "recommendations" in st.session_state:
                     st.image(f"https://covers.openlibrary.org/b/isbn/{book['isbn']}-M.jpg")
 
 st.rerun()
-
-
-
-
-
-
-
-
-
-
-
