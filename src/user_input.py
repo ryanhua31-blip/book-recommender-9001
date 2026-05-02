@@ -33,4 +33,3 @@ def user_input():
         unliked_genres = st.text_input("Enter some genre(s) you don't like here")
 
     return liked_books, liked_genres, unliked_books, unliked_genres
-
